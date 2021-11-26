@@ -1,6 +1,5 @@
 .data
 vocales: .asciiz "aeiou"
-input: .asciiz "Ingrese la cadena de entrada(sin limite):"
 print: .asciiz "\n Total de vocales: " 
 .text
 
@@ -9,15 +8,20 @@ main: li $t0, 0
       li $t2, 0
       li $t3, 1
       li $t4, 0
-      la $a0, input 
-      li $v0, 4
+      la  $a0, input
+      li  $v0, 4
       syscall
-      li $v0, 8
 
+      la  $a0, buffer
+      li  $a1, 1024
+      li  $v0, 8
+      syscall
+
+      la $t0, buffer
 
 input_loop: 
     beqz $t1 jump
-    lb $t1 input($t0)
+    lb $t1, $t0
     jal vocals_lookup
     addi $t0 $t0 1
     b input_loop
@@ -39,7 +43,7 @@ vocals_return:
     jr $ra
 
 jump:
-    la $a0 jump
+    la $a0 print
     li $v0 4
     syscall
     move $a0 $t4
@@ -48,4 +52,4 @@ jump:
     b exit
 
 exit: li $v0 10
-     sycall
+     syscall
