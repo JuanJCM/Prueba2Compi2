@@ -1,6 +1,8 @@
 .data
 vocales: .asciiz "aeiou"
+input : .asciiz "Ingrese la cadena(1024): "
 print: .asciiz "\n Total de vocales: " 
+buffer: .space 1024
 .text
 
 main: li $t0, 0
@@ -21,7 +23,7 @@ main: li $t0, 0
 
 input_loop: 
     beqz $t1 jump
-    lb $t1, $t0
+    lb $t1, ($t0)
     jal vocals_lookup
     addi $t0 $t0 1
     b input_loop
